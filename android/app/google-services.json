@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "554896645478",
+    "firebase_url": "https://astra-5cbf5.firebaseio.com",
+    "project_id": "astra-5cbf5",
+    "storage_bucket": "astra-5cbf5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:554896645478:android:8c4b8d6adadeb152fe3ca7",
+        "android_client_info": {
+          "package_name": "com.example.astra"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "554896645478-bkaauvsvah7lgaa1b950kbn4k9bocr5e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.astra",
+            "certificate_hash": "ca4166c164863cf073ed2b488384b52a47379e73"
+          }
+        },
+        {
+          "client_id": "554896645478-mum63uu7n6stldpbbp70e2jhph2vqomr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUagQAv7E9wSL05LY7HYyfIn52RVOm3Kk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "554896645478-mum63uu7n6stldpbbp70e2jhph2vqomr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
