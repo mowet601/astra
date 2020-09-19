@@ -1,3 +1,4 @@
+import 'package:astra/screens/pages/chat_list_screen.dart';
 import 'package:astra/utils/universal_variables.dart';
 import "package:flutter/material.dart";
 
@@ -32,8 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: UniversalVariables.blackColor,
       body: PageView(
         children: [
-          Center(
-            child: Text("Chats Here", style: TextStyle(color: Colors.white),),
+          Container(
+            child: ChatListScreen(),
           ),
           Center(
             child: Text("Call Logs Here", style: TextStyle(color: Colors.white),),
