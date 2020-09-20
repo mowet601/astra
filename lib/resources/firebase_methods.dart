@@ -1,3 +1,4 @@
+import 'package:astra/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -56,7 +57,7 @@ class FirebaseMethods {
         .setData(user.toMap(user));
   }
 
-  Future<void> signout() async{
+  Future<void> signout() async {
     await _googleSignIn.disconnect();
     await _googleSignIn.signOut();
 
@@ -65,14 +66,32 @@ class FirebaseMethods {
 
   Future<List<User>> fetchAllUsers(FirebaseUser currentUser) async {
     List<User> userList = List<User>();
-    QuerySnapshot querySnapshot = await firestore.collection('users').getDocuments();
+    QuerySnapshot querySnapshot =
+        await firestore.collection('users').getDocuments();
     var snap = querySnapshot.documents;
-    for(var i =0; i<snap.length; i++) {
+    for (var i = 0; i < snap.length; i++) {
       // showing all the users in the app except user
-      if(snap[i].documentID != currentUser.uid) {
+      if (snap[i].documentID != currentUser.uid) {
         userList.add(User.fromMap(snap[i].data));
       }
     }
     return userList;
+  }
+
+  Future<void> addMessageToDb(
+      Message message, User sender, User receiver) async {
+    var map = message.toMap();
+    // storing data: MESSAGES -> SENDER_ID -> RECEIVER_ID-> MAP
+    await firestore
+        .collection("messages")
+        .document(message.senderId)
+        .collection(message.recieverId)
+        .add(map);
+
+    return await firestore
+        .collection("messages")
+        .document(message.recieverId)
+        .collection(message.senderId)
+        .add(map);
   }
 }
