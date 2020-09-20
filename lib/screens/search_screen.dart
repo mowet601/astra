@@ -1,5 +1,6 @@
 import 'package:astra/models/user.dart';
 import 'package:astra/resources/firebase_repository.dart';
+import 'package:astra/screens/chatscreens/chat_screen.dart';
 import 'package:astra/utils/universal_variables.dart';
 import 'package:astra/widgets/custom_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -113,7 +114,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
         return CustomTile(
           mini: false,
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ChatScreen(searchedUser)));
+          },
           leading: CircleAvatar(
             backgroundImage: NetworkImage(searchedUser.profilePhoto),
             backgroundColor: Colors.grey,
