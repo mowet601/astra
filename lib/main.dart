@@ -1,6 +1,7 @@
 import 'package:astra/resources/firebase_repository.dart';
 import 'package:astra/screens/home_screen.dart';
 import 'package:astra/screens/login_screen.dart';
+import 'package:astra/screens/search_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 
@@ -23,6 +24,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: "Astra",
       debugShowCheckedModeBanner: false,
+      initialRoute: "/",
+      routes: {
+        SearchScreen.routeName : (ctx) => SearchScreen(), 
+      },
       home: FutureBuilder(
           future: _firebaseRepository.getCurrentUser(),
           builder: (ctx, AsyncSnapshot<FirebaseUser> snap) {

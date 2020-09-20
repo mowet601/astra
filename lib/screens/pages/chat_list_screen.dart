@@ -1,4 +1,5 @@
 import 'package:astra/resources/firebase_repository.dart';
+import 'package:astra/screens/search_screen.dart';
 import 'package:astra/utils/universal_variables.dart';
 import 'package:astra/utils/utilities.dart';
 import 'package:astra/widgets/chat_list_container.dart';
@@ -45,7 +46,21 @@ class _ChatListScreenState extends State<ChatListScreen> {
             Icons.search,
             color: Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              PageRouteBuilder(
+                transitionDuration: Duration(seconds: 1),
+                transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation, Widget child) {
+                  animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
+
+                  return ScaleTransition(alignment: Alignment.topRight, scale: animation, child: child);
+                },
+                pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation) {
+                  return SearchScreen();
+                }
+              ),
+            );
+          },
         ),
         IconButton(
           icon: Icon(

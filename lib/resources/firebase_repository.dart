@@ -1,3 +1,4 @@
+import 'package:astra/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:astra/resources/firebase_methods.dart';
 
@@ -14,4 +15,6 @@ class FirebaseRepository {
   Future<void> addDataToDb(FirebaseUser user) => _firebaseMethods.addDataToDb(user);
 
   Future<void> signOut() => _firebaseMethods.signout();
+
+  Future<List<User>> fetchAllUsers(FirebaseUser user) => _firebaseMethods.fetchAllUsers(user);
 }
