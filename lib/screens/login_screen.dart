@@ -22,9 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         children: [
           Center(
-            child: loginButton(),
+            child: isLoginPressed? Center(child: CircularProgressIndicator(),) : loginButton(),
           ),
-          isLoginPressed? Center(child: CircularProgressIndicator(),) : Container(),
         ],
       ),
     );
