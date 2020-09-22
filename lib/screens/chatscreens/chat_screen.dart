@@ -6,6 +6,8 @@ import 'package:astra/models/user.dart';
 import 'package:astra/provider/image_upload_provider.dart';
 import 'package:astra/resources/firebase_repository.dart';
 import 'package:astra/screens/chatscreens/cached_image.dart';
+import 'package:astra/utils/call_utils.dart';
+import 'package:astra/utils/permissions.dart';
 import 'package:astra/utils/universal_variables.dart';
 import 'package:astra/utils/utilities.dart';
 import 'package:astra/widgets/custom_appbar.dart';
@@ -200,7 +202,7 @@ class _ChatScreenState extends State<ChatScreen> {
         color: Colors.white,
         fontSize: 16.0,
       )
-    ) : CachedImage(url: message.photoUrl);
+    ) : CachedImage(message.photoUrl, height: 250, width: 250, radius: 10,);
   }
 
   Widget receiverLayout(Message message) {
@@ -273,7 +275,10 @@ class _ChatScreenState extends State<ChatScreen> {
                         title: "Photos",
                         subtitle: "Share Photos",
                         icon: Icons.image,
-                        onPressed: () => pickImage(source: ImageSource.gallery),
+                        onPressed: () {
+                          pickImage(source: ImageSource.gallery);
+                          Navigator.of(context).pop();
+                        },
                       ),
                       ModalTile(
                         title: "Location",
@@ -428,7 +433,7 @@ class _ChatScreenState extends State<ChatScreen> {
           icon: Icon(
             Icons.video_call,
           ),
-          onPressed: () {},
+          onPressed: () async => await Permissions.cameraAndMicrophonePermissionsGranted()? CallUtils.dial(from: sender, to: widget.receiver, context: context) : {},
         ),
         IconButton(
           icon: Icon(

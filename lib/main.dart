@@ -1,4 +1,5 @@
 import 'package:astra/provider/image_upload_provider.dart';
+import 'package:astra/provider/user_provider.dart';
 import 'package:astra/resources/firebase_repository.dart';
 import 'package:astra/screens/home_screen.dart';
 import 'package:astra/screens/login_screen.dart';
@@ -23,8 +24,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     _firebaseRepository.signOut();
 
-    return ChangeNotifierProvider<ImageUploadProvider>(
-      create: (ctx) => ImageUploadProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ImageUploadProvider(),),
+        ChangeNotifierProvider(create: (_) => UserProvider(),),
+      ],
           child: MaterialApp(
         title: "Astra",
         debugShowCheckedModeBanner: false,
