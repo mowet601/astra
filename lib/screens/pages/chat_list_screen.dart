@@ -1,34 +1,18 @@
-import 'package:astra/resources/firebase_repository.dart';
+import 'package:astra/models/contact.dart';
+import 'package:astra/provider/user_provider.dart';
+import 'package:astra/resources/chat_methods.dart';
 import 'package:astra/screens/search_screen.dart';
 import 'package:astra/utils/universal_variables.dart';
-import 'package:astra/utils/utilities.dart';
-import 'package:astra/widgets/chat_list_container.dart';
+import 'package:astra/widgets/contact_view.dart';
 import 'package:astra/widgets/custom_appbar.dart';
+import 'package:astra/widgets/new_chat_button.dart';
+import 'package:astra/widgets/quiet_box.dart';
 import 'package:astra/widgets/user_circle.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
+import 'package:provider/provider.dart';
 
-class ChatListScreen extends StatefulWidget {
-  @override
-  _ChatListScreenState createState() => _ChatListScreenState();
-}
-
-final FirebaseRepository _repository = FirebaseRepository();
-
-class _ChatListScreenState extends State<ChatListScreen> {
-  String currentUserId;
-  String initials;
-
-  @override
-  void initState() {
-    super.initState();
-    _repository.getCurrentUser().then((value) {
-      setState(() {
-        currentUserId = value.uid;
-        initials = Utils.getInitials(value.displayName);
-      });
-    });
-  }
-
+class ChatListScreen extends StatelessWidget {
   CustomAppBar customAppBar(BuildContext context) {
     return CustomAppBar(
       leading: IconButton(
@@ -38,7 +22,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
         ),
         onPressed: () {},
       ),
-      title: UserCircle(initials),
+      title: UserCircle(),
       centerTitle: true,
       actions: <Widget>[
         IconButton(
@@ -79,24 +63,43 @@ class _ChatListScreenState extends State<ChatListScreen> {
       backgroundColor: UniversalVariables.blackColor,
       appBar: customAppBar(context),
       floatingActionButton: NewChatButton(),
-      body: ChatListContainer(currentUserId),
+      body: ChatListContainer(),
     );
   }
 }
 
-class NewChatButton extends StatelessWidget {
+class ChatListContainer extends StatelessWidget {
+  final ChatMethods _chatMethods = ChatMethods();
+
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = Provider.of<UserProvider>(context);
+
     return Container(
-      decoration: BoxDecoration(
-          gradient: UniversalVariables.goodGradient,
-          borderRadius: BorderRadius.circular(50)),
-      child: Icon(
-        Icons.edit,
-        color: Colors.white,
-        size: 25,
-      ),
-      padding: EdgeInsets.all(15),
+      child: StreamBuilder<QuerySnapshot>(
+          stream: _chatMethods.fetchContacts(
+            userId: userProvider.getUser.uid,
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var docList = snapshot.data.documents;
+
+              if (docList.isEmpty) {
+                return QuietBox();
+              }
+              return ListView.builder(
+                padding: EdgeInsets.all(10),
+                itemCount: docList.length,
+                itemBuilder: (context, index) {
+                  Contact contact = Contact.fromMap(docList[index].data);
+
+                  return ContactView(contact);
+                },
+              );
+            }
+
+            return Center(child: CircularProgressIndicator());
+          }),
     );
   }
 }

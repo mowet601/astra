@@ -4,7 +4,10 @@ import 'package:astra/enum/view_state.dart';
 import 'package:astra/models/message.dart';
 import 'package:astra/models/user.dart';
 import 'package:astra/provider/image_upload_provider.dart';
-import 'package:astra/resources/firebase_repository.dart';
+import 'package:astra/resources/auth_methods.dart';
+import 'package:astra/resources/chat_methods.dart';
+import 'package:astra/resources/storage_methods.dart';
+import 'package:astra/screens/callscreens/pickup/pickup_layout.dart';
 import 'package:astra/screens/chatscreens/cached_image.dart';
 import 'package:astra/utils/call_utils.dart';
 import 'package:astra/utils/permissions.dart';
@@ -34,7 +37,9 @@ class _ChatScreenState extends State<ChatScreen> {
   ImageUploadProvider _imageUploadProvider;
   ScrollController _listViewController = ScrollController();
   TextEditingController textFieldController = TextEditingController();
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
+  final StorageMethods _storageMethods = StorageMethods();
+  final ChatMethods _chatMethods = ChatMethods();
+  final AuthMethods _authMethods = AuthMethods();
   bool isWriting = false;
   FocusNode inputTextFieldFocus = FocusNode();
   bool showEmojiPicker = false;
@@ -45,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _firebaseRepository.getCurrentUser().then((value) {
+    _authMethods.getCurrentUser().then((value) {
       _currentUID = value.uid;
 
       setState(() {
@@ -76,24 +81,26 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     _imageUploadProvider = Provider.of<ImageUploadProvider>(context);
 
-    return Scaffold(
-      backgroundColor: UniversalVariables.blackColor,
-      appBar: customAppBar(context),
-      body: Column(
-        children: <Widget>[
-          Flexible(
-            child: messageList(),
-          ),
-           _imageUploadProvider.getViewState == ViewState.LOADING
-              ? Container(
-                  alignment: Alignment.centerRight,
-                  margin: EdgeInsets.only(right: 15),
-                  child: CircularProgressIndicator(),
-                )
-              : Container(),
-          showBottomIcons(),
-          showEmojiPicker ? Container(child: emojiContainer()) : Container(),
-        ],
+    return PickupLayout(
+        scaffold: Scaffold(
+        backgroundColor: UniversalVariables.blackColor,
+        appBar: customAppBar(context),
+        body: Column(
+          children: <Widget>[
+            Flexible(
+              child: messageList(),
+            ),
+             _imageUploadProvider.getViewState == ViewState.LOADING
+                ? Container(
+                    alignment: Alignment.centerRight,
+                    margin: EdgeInsets.only(right: 15),
+                    child: CircularProgressIndicator(),
+                  )
+                : Container(),
+            showBottomIcons(),
+            showEmojiPicker ? Container(child: emojiContainer()) : Container(),
+          ],
+        ),
       ),
     );
   }
@@ -164,9 +171,9 @@ class _ChatScreenState extends State<ChatScreen> {
   
   void pickImage({@required ImageSource source}) async {
     File selectedImage = await Utils.pickImage(source: source);
-    _firebaseRepository.uploadImage(
+    _storageMethods.uploadImage(
         image: selectedImage,
-        receieverId: widget.receiver.uid,
+        receiverId: widget.receiver.uid,
         senderId: _currentUID,
         imageUploadProvider: _imageUploadProvider,
         );
@@ -411,7 +418,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     textFieldController.text = "";
 
-    _firebaseRepository.addMessageToDb(_message, sender, widget.receiver);
+    _chatMethods.addMessageToDb(_message, sender, widget.receiver);
   }
 
   CustomAppBar customAppBar(context) {

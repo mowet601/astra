@@ -1,4 +1,6 @@
+import 'package:astra/enum/user_state.dart';
 import 'package:astra/provider/user_provider.dart';
+import 'package:astra/resources/auth_methods.dart';
 import 'package:astra/screens/callscreens/pickup/pickup_layout.dart';
 import 'package:astra/screens/pages/chat_list_screen.dart';
 import 'package:astra/utils/universal_variables.dart';
@@ -11,23 +13,72 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
   PageController pageController;
   int _pageNo = 0;
 
   UserProvider userProvider;
+  final AuthMethods _authMethods = AuthMethods();
 
   @override
   void initState() {
     super.initState();
 
-    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
       userProvider = Provider.of<UserProvider>(context, listen: false);
-    // so that when you call the user is not set to null
-    userProvider.refreshUser(); 
+      await userProvider.refreshUser();
+
+      _authMethods.setUserState(
+        userId: userProvider.getUser.uid,
+        userState: UserState.Online, 
+      );
     });
-    
+
+    WidgetsBinding.instance.addObserver(this);
     pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    String currentUserId =
+        (userProvider != null && userProvider.getUser != null)
+            ? userProvider.getUser.uid
+            : "";
+
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.resumed:
+        currentUserId != null
+            ? _authMethods.setUserState(
+                userId: currentUserId, userState: UserState.Online)
+            : print("resume state");
+        break;
+      case AppLifecycleState.inactive:
+        currentUserId != null
+            ? _authMethods.setUserState(
+                userId: currentUserId, userState: UserState.Offline)
+            : print("inactive state");
+        break;
+      case AppLifecycleState.paused:
+        currentUserId != null
+            ? _authMethods.setUserState(
+                userId: currentUserId, userState: UserState.Waiting)
+            : print("paused state");
+        break;
+      case AppLifecycleState.detached:
+        currentUserId != null
+            ? _authMethods.setUserState(
+                userId: currentUserId, userState: UserState.Offline)
+            : print("detached state");
+        break;
+    }
   }
 
   void pageChanged(int page) {
@@ -42,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double _labelFontSize = 10;
     return PickupLayout(
           scaffold: Scaffold(
         backgroundColor: UniversalVariables.blackColor,

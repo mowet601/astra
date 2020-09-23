@@ -1,6 +1,7 @@
 import 'package:astra/screens/callscreens/call_screen.dart';
 import 'package:astra/screens/chatscreens/cached_image.dart';
 import 'package:astra/utils/permissions.dart';
+import 'package:astra/utils/universal_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:astra/models/call.dart';
 import 'package:astra/resources/call_methods.dart';
@@ -16,9 +17,10 @@ class PickupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: UniversalVariables.blackColor,
       body: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(vertical: 100),
+        padding: EdgeInsets.symmetric(vertical: 20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -26,20 +28,22 @@ class PickupScreen extends StatelessWidget {
               "Incoming Call",
               style: TextStyle(
                 fontSize: 30,
+                fontFamily: "Inconsolata",
+                color: Colors.white,
               ),
             ),
             SizedBox(height: 50),
             CachedImage(
               call.callerPic,
               isRound: true,
-              radius: 180,
+              radius: 100,
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 50),
             Text(
               call.callerName,
               style: TextStyle(
-                fontFamily: "Roboto",
                 fontWeight: FontWeight.w900,
+                color: Colors.white,
                 fontSize: 20,
               ),
             ),

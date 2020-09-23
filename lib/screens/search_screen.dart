@@ -1,5 +1,6 @@
 import 'package:astra/models/user.dart';
-import 'package:astra/resources/firebase_repository.dart';
+import 'package:astra/resources/auth_methods.dart';
+import 'package:astra/screens/callscreens/pickup/pickup_layout.dart';
 import 'package:astra/screens/chatscreens/chat_screen.dart';
 import 'package:astra/utils/universal_variables.dart';
 import 'package:astra/widgets/custom_tile.dart';
@@ -14,7 +15,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
+  final AuthMethods _authMethods = AuthMethods();
 
   List<User> userList;
   String searchedText = "";
@@ -24,8 +25,8 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _firebaseRepository.getCurrentUser().then((FirebaseUser user) {
-      _firebaseRepository.fetchAllUsers(user).then((List<User> list) {
+    _authMethods.getCurrentUser().then((FirebaseUser user) {
+      _authMethods.fetchAllUsers(user).then((List<User> list) {
         setState(() {
           userList = list;
         });
@@ -139,12 +140,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: UniversalVariables.blackColor,
-      appBar: searchBar(context),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: buildSuggestions(searchedText),
+    return PickupLayout(
+        scaffold: Scaffold(
+        backgroundColor: UniversalVariables.blackColor,
+        appBar: searchBar(context),
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: buildSuggestions(searchedText),
+        ),
       ),
     );
   }

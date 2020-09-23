@@ -1,4 +1,4 @@
-import 'package:astra/resources/firebase_repository.dart';
+import 'package:astra/resources/auth_methods.dart';
 import 'package:astra/screens/home_screen.dart';
 import 'package:astra/utils/universal_variables.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +11,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  FirebaseRepository _repository = FirebaseRepository();
+  final AuthMethods _authMethods = AuthMethods();
 
   bool isLoginPressed = false;
 
@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       isLoginPressed = true;
     });
-    _repository.signIn().then((FirebaseUser user) {
+    _authMethods.signIn().then((FirebaseUser user) {
       if (user != null) {
         authenticateUser(user);
       } else {
@@ -53,13 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void authenticateUser(FirebaseUser user) {
-    _repository.authenticateUser(user).then((value) {
+    _authMethods.authenticateUser(user).then((value) {
       setState(() {
         isLoginPressed = false;
       });
       
       if (value) {
-        _repository.addDataToDb(user).then((value) {
+        _authMethods.addDataToDb(user).then((value) {
           Navigator.of(context)
               .pushReplacement(MaterialPageRoute(builder: (context) {
             return HomeScreen();

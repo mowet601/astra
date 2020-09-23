@@ -320,7 +320,7 @@ class _CallScreenState extends State<CallScreen> {
             child: Icon(
               muted ? Icons.mic : Icons.mic_off,
               color: muted ? Colors.white : Colors.blueAccent,
-              size: 20.0,
+              size: 50.0,
             ),
             shape: CircleBorder(),
             elevation: 2.0,
@@ -334,7 +334,7 @@ class _CallScreenState extends State<CallScreen> {
             child: Icon(
               Icons.call_end,
               color: Colors.white,
-              size: 35.0,
+              size: 85.0,
             ),
             shape: CircleBorder(),
             elevation: 2.0,
@@ -346,7 +346,7 @@ class _CallScreenState extends State<CallScreen> {
             child: Icon(
               Icons.switch_camera,
               color: Colors.blueAccent,
-              size: 20.0,
+              size: 50.0,
             ),
             shape: CircleBorder(),
             elevation: 2.0,

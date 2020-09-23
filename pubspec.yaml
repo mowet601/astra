@@ -45,6 +45,7 @@ dependencies:
   sqflite: ^1.3.0
   intl: ^0.16.1
   image: ^2.1.17
+  shared_preferences: ^0.5.8
 
 dev_dependencies:
   flutter_test:
@@ -78,9 +79,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Roboto
+    - family: Inconsolata
       fonts:
-        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Inconsolata-Medium.ttf
   #       - asset: fonts/Schyler-Italic.ttf
           weight: 700
   #   - family: Trajan Pro

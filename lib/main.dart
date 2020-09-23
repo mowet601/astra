@@ -1,6 +1,6 @@
 import 'package:astra/provider/image_upload_provider.dart';
 import 'package:astra/provider/user_provider.dart';
-import 'package:astra/resources/firebase_repository.dart';
+import 'package:astra/resources/auth_methods.dart';
 import 'package:astra/screens/home_screen.dart';
 import 'package:astra/screens/login_screen.dart';
 import 'package:astra/screens/search_screen.dart';
@@ -18,12 +18,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  FirebaseRepository _firebaseRepository = FirebaseRepository();
+  final AuthMethods _authMethods = AuthMethods();
 
   @override
   Widget build(BuildContext context) {
-    _firebaseRepository.signOut();
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ImageUploadProvider(),),
@@ -37,7 +35,7 @@ class _MyAppState extends State<MyApp> {
           SearchScreen.routeName : (ctx) => SearchScreen(), 
         },
         home: FutureBuilder(
-            future: _firebaseRepository.getCurrentUser(),
+            future: _authMethods.getCurrentUser(),
             builder: (ctx, AsyncSnapshot<FirebaseUser> snap) {
               if (snap.hasData) {
                 return HomeScreen();
