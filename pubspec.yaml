@@ -46,6 +46,7 @@ dependencies:
   intl: ^0.16.1
   image: ^2.1.17
   shared_preferences: ^0.5.8
+  flutter_ringtone_player: ^2.0.0
 
 dev_dependencies:
   flutter_test:

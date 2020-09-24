@@ -5,14 +5,35 @@ import 'package:astra/utils/universal_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:astra/models/call.dart';
 import 'package:astra/resources/call_methods.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
-class PickupScreen extends StatelessWidget {
+class PickupScreen extends StatefulWidget {
   final Call call;
-  final CallMethods callMethods = CallMethods();
 
   PickupScreen({
     @required this.call,
   });
+
+  @override
+  _PickupScreenState createState() => _PickupScreenState();
+}
+
+class _PickupScreenState extends State<PickupScreen> {
+  final CallMethods callMethods = CallMethods();
+
+  @override
+  void initState() {
+    super.initState();
+    // Start ringtone.
+    FlutterRingtonePlayer.playRingtone();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    FlutterRingtonePlayer.stop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +53,15 @@ class PickupScreen extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 50),CachedImage(
-                call.callerPic,
-                isRound: true,
-                radius: 100,
-              ),
+            SizedBox(height: 50),
+            CachedImage(
+              widget.call.callerPic,
+              isRound: true,
+              radius: 100,
+            ),
             SizedBox(height: 50),
             Text(
-              call.callerName,
+              widget.call.callerName,
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
@@ -55,22 +77,26 @@ class PickupScreen extends StatelessWidget {
                   icon: Icon(Icons.call_end),
                   color: Colors.redAccent,
                   onPressed: () async {
-                    await callMethods.endCall(call: call);
+                    FlutterRingtonePlayer.stop();
+                    await callMethods.endCall(call: widget.call);
                   },
                 ),
                 SizedBox(width: 25),
                 IconButton(
                   icon: Icon(Icons.call),
                   color: Colors.green,
-                  onPressed: () async =>
+                  onPressed: () async {
+                      FlutterRingtonePlayer.stop();
                       await Permissions.cameraAndMicrophonePermissionsGranted()
                           ? Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CallScreen(call: call),
+                                builder: (context) =>
+                                    CallScreen(call: widget.call),
                               ),
                             )
-                          : {},
+                          : {};
+                  }
                 ),
               ],
             ),
