@@ -3,6 +3,7 @@ import 'package:astra/provider/user_provider.dart';
 import 'package:astra/resources/auth_methods.dart';
 import 'package:astra/screens/callscreens/pickup/pickup_layout.dart';
 import 'package:astra/screens/pages/chat_list_screen.dart';
+import 'package:astra/screens/pages/logs/log_screen.dart';
 import 'package:astra/utils/universal_variables.dart';
 import "package:flutter/material.dart";
 import 'package:flutter/scheduler.dart';
@@ -101,9 +102,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
             Container(
               child: ChatListScreen(),
             ),
-            Center(
-              child: Text("Call Logs Here", style: TextStyle(color: Colors.white),),
-            ),
+            LogScreen(),
             Center(
               child: Text("Contacts Here", style: TextStyle(color: Colors.white),),
             ),

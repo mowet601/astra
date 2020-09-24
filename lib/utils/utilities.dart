@@ -4,6 +4,7 @@ import 'package:astra/enum/user_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import "package:image/image.dart" as Im;
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Utils {
@@ -71,5 +72,11 @@ class Utils {
       default:
         return UserState.Waiting;
     }
+  }
+
+  static String formatDateString(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    var formatter = DateFormat("dd/MM/yy");
+    return formatter.format(dateTime);
   }
 }
