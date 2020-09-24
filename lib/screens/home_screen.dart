@@ -93,7 +93,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
 
   @override
   Widget build(BuildContext context) {
-    double _labelFontSize = 10;
     return PickupLayout(
           scaffold: Scaffold(
         backgroundColor: UniversalVariables.blackColor,

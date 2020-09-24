@@ -62,7 +62,7 @@ class ViewLayout extends StatelessWidget {
       title: Text(
         (contact != null ? contact.name : null) != null ? contact.name : "..",
         style:
-            TextStyle(color: Colors.white, fontFamily: "Arial", fontSize: 19),
+            TextStyle(color: Colors.white, fontFamily: "Nunito", fontSize: 19),
       ),
       subtitle: LastMessageContainer(
         stream: _chatMethods.fetchLastMessageBetween(

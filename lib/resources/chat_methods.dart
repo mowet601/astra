@@ -91,7 +91,7 @@ class ChatMethods {
     Message message;
 
     message = Message.imageMessage(
-        message: "IMAGE",
+        message: "📸 Photo",
         recieverId: receiverId,
         senderId: senderId,
         photoUrl: url,
@@ -116,6 +116,7 @@ class ChatMethods {
   Stream<QuerySnapshot> fetchContacts({String userId}) => _userCollection
       .document(userId)
       .collection("contacts")
+      .orderBy("added_on")
       .snapshots();
 
   Stream<QuerySnapshot> fetchLastMessageBetween({

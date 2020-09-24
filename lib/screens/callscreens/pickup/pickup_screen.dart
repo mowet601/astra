@@ -32,19 +32,19 @@ class PickupScreen extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 50),
-            CachedImage(
-              call.callerPic,
-              isRound: true,
-              radius: 100,
-            ),
+            SizedBox(height: 50),CachedImage(
+                call.callerPic,
+                isRound: true,
+                radius: 100,
+              ),
             SizedBox(height: 50),
             Text(
               call.callerName,
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 25,
+                fontFamily: "Lato",
               ),
             ),
             SizedBox(height: 75),

@@ -10,9 +10,16 @@ import 'package:astra/widgets/quiet_box.dart';
 import 'package:astra/widgets/user_circle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter/material.dart";
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
-class ChatListScreen extends StatelessWidget {
+class ChatListScreen extends StatefulWidget {
+  @override
+  _ChatListScreenState createState() => _ChatListScreenState();
+}
+
+class _ChatListScreenState extends State<ChatListScreen> {
+  UserProvider userProvider;
   CustomAppBar customAppBar(BuildContext context) {
     return CustomAppBar(
       leading: IconButton(
@@ -58,12 +65,21 @@ class ChatListScreen extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: UniversalVariables.blackColor,
       appBar: customAppBar(context),
       floatingActionButton: NewChatButton(),
-      body: ChatListContainer(),
+      body: RefreshIndicator(onRefresh: () async=> await userProvider.refreshUser(), child: ChatListContainer()),
     );
   }
 }
@@ -92,7 +108,6 @@ class ChatListContainer extends StatelessWidget {
                 itemCount: docList.length,
                 itemBuilder: (context, index) {
                   Contact contact = Contact.fromMap(docList[index].data);
-
                   return ContactView(contact);
                 },
               );

@@ -315,12 +315,12 @@ class _CallScreenState extends State<CallScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          RawMaterialButton(
+           RawMaterialButton(
             onPressed: _onToggleMute,
             child: Icon(
               muted ? Icons.mic : Icons.mic_off,
               color: muted ? Colors.white : Colors.blueAccent,
-              size: 50.0,
+              size: 30.0,
             ),
             shape: CircleBorder(),
             elevation: 2.0,
@@ -334,7 +334,7 @@ class _CallScreenState extends State<CallScreen> {
             child: Icon(
               Icons.call_end,
               color: Colors.white,
-              size: 85.0,
+              size: 45.0,
             ),
             shape: CircleBorder(),
             elevation: 2.0,
@@ -346,7 +346,7 @@ class _CallScreenState extends State<CallScreen> {
             child: Icon(
               Icons.switch_camera,
               color: Colors.blueAccent,
-              size: 50.0,
+              size: 30.0,
             ),
             shape: CircleBorder(),
             elevation: 2.0,

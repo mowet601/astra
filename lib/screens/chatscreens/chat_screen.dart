@@ -1,14 +1,15 @@
 import 'dart:io';
-
 import 'package:astra/enum/view_state.dart';
 import 'package:astra/models/message.dart';
 import 'package:astra/models/user.dart';
 import 'package:astra/provider/image_upload_provider.dart';
+import 'package:astra/provider/user_provider.dart';
 import 'package:astra/resources/auth_methods.dart';
 import 'package:astra/resources/chat_methods.dart';
 import 'package:astra/resources/storage_methods.dart';
 import 'package:astra/screens/callscreens/pickup/pickup_layout.dart';
 import 'package:astra/screens/chatscreens/cached_image.dart';
+import 'package:astra/screens/chatscreens/full_image_screen.dart';
 import 'package:astra/utils/call_utils.dart';
 import 'package:astra/utils/permissions.dart';
 import 'package:astra/utils/universal_variables.dart';
@@ -45,6 +46,7 @@ class _ChatScreenState extends State<ChatScreen> {
   bool showEmojiPicker = false;
   User sender;
   String _currentUID;
+  
 
   @override
   void initState() {
@@ -138,19 +140,18 @@ class _ChatScreenState extends State<ChatScreen> {
             );
           }
           SchedulerBinding.instance.addPostFrameCallback((_) {
-            _listViewController.animateTo(
-                _listViewController.position.maxScrollExtent,
-                duration: Duration(milliseconds: 250),
-                curve: Curves.easeInBack);
+            _listViewController.jumpTo(
+                _listViewController.position.maxScrollExtent
+          );
           });
 
           return ListView.builder(
-              padding: EdgeInsets.all(10),
-              controller: _listViewController,
-              itemCount: snap.data.documents.length,
-              itemBuilder: (ctxt, idx) {
-                return chatMessageItem(snap.data.documents[idx]);
-              });
+                padding: EdgeInsets.all(10),
+                controller: _listViewController,
+                itemCount: snap.data.documents.length,
+                itemBuilder: (ctxt, idx) {
+                  return chatMessageItem(snap.data.documents[idx]);
+                });
         });
   }
 
@@ -209,7 +210,11 @@ class _ChatScreenState extends State<ChatScreen> {
         color: Colors.white,
         fontSize: 16.0,
       )
-    ) : CachedImage(message.photoUrl, height: 250, width: 250, radius: 10,);
+    ) : GestureDetector(onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FullImageScreen(message.photoUrl,),)),
+          child: Hero(tag: message.photoUrl,child: CachedImage(message.photoUrl, height: 250, width: 250, radius: 10,)));
   }
 
   Widget receiverLayout(Message message) {
