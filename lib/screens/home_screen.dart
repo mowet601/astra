@@ -1,6 +1,7 @@
 import 'package:astra/enum/user_state.dart';
 import 'package:astra/provider/user_provider.dart';
 import 'package:astra/resources/auth_methods.dart';
+import 'package:astra/resources/local_db/repository/log_repository.dart';
 import 'package:astra/screens/callscreens/pickup/pickup_layout.dart';
 import 'package:astra/screens/pages/chat_list_screen.dart';
 import 'package:astra/screens/pages/logs/log_screen.dart';
@@ -33,6 +34,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
         userId: userProvider.getUser.uid,
         userState: UserState.Online, 
       );
+
+      LogRepository.init(isHive: true, dbName: userProvider.getUser.uid,);
     });
 
     WidgetsBinding.instance.addObserver(this);
@@ -150,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.chat,
+                    Icons.contacts,
                     color: (_pageNo == 2
                         ? UniversalVariables.lightBlueColor
                         : UniversalVariables.greyColor),

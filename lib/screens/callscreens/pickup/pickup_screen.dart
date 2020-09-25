@@ -1,3 +1,5 @@
+import 'package:astra/models/log.dart';
+import 'package:astra/resources/local_db/repository/log_repository.dart';
 import 'package:astra/screens/callscreens/call_screen.dart';
 import 'package:astra/screens/chatscreens/cached_image.dart';
 import 'package:astra/utils/permissions.dart';
@@ -20,19 +22,35 @@ class PickupScreen extends StatefulWidget {
 
 class _PickupScreenState extends State<PickupScreen> {
   final CallMethods callMethods = CallMethods();
+  bool isCallMissed = true;
+
+  addToLocalStorage({@required String callStatus}) {
+    Log log = Log(
+      callerName: widget.call.callerName,
+      callerPic: widget.call.callerPic,
+      receiverName: widget.call.receiverName,
+      receiverPic: widget.call.receiverPic,
+      timestamp: DateTime.now().toString(),
+      callStatus: callStatus,
+    );
+
+    LogRepository.addLogs(log);
+  }
+
+  @override
+  void dispose() {
+    FlutterRingtonePlayer.stop();
+    if (isCallMissed) {
+      addToLocalStorage(callStatus: "missed");
+    }
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
     // Start ringtone.
     FlutterRingtonePlayer.playRingtone();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    FlutterRingtonePlayer.stop();
   }
 
   @override
@@ -77,15 +95,19 @@ class _PickupScreenState extends State<PickupScreen> {
                   icon: Icon(Icons.call_end),
                   color: Colors.redAccent,
                   onPressed: () async {
+                    isCallMissed = false;
+                    addToLocalStorage(callStatus: "received");
                     FlutterRingtonePlayer.stop();
                     await callMethods.endCall(call: widget.call);
                   },
                 ),
                 SizedBox(width: 25),
                 IconButton(
-                  icon: Icon(Icons.call),
-                  color: Colors.green,
-                  onPressed: () async {
+                    icon: Icon(Icons.call),
+                    color: Colors.green,
+                    onPressed: () async {
+                      isCallMissed = false;
+                      addToLocalStorage(callStatus: "received");
                       FlutterRingtonePlayer.stop();
                       await Permissions.cameraAndMicrophonePermissionsGranted()
                           ? Navigator.push(
@@ -96,8 +118,7 @@ class _PickupScreenState extends State<PickupScreen> {
                               ),
                             )
                           : {};
-                  }
-                ),
+                    }),
               ],
             ),
           ],

@@ -1,8 +1,16 @@
-import 'package:flutter/material.dart';
 import 'package:astra/screens/search_screen.dart';
 import 'package:astra/utils/universal_variables.dart';
+import 'package:flutter/material.dart';
 
 class QuietBox extends StatelessWidget {
+  final String heading;
+  final String subtitle;
+
+  QuietBox({
+    @required this.heading,
+    @required this.subtitle,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -16,21 +24,21 @@ class QuietBox extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                "Contacts",
+                heading,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 30,
-                  color: Colors.white,
                   fontFamily: "Lato",
+                  color: Colors.white,
                 ),
               ),
               SizedBox(height: 25),
               Text(
-                "Search For Friends and Family!",
+                subtitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  letterSpacing: 1,
+                  letterSpacing: 1.2,
                   fontWeight: FontWeight.normal,
                   fontSize: 18,
                   color: Colors.white,
@@ -38,7 +46,7 @@ class QuietBox extends StatelessWidget {
               ),
               SizedBox(height: 25),
               RaisedButton(
-                elevation: 5.0,
+                elevation: 10.0,
                 color: UniversalVariables.lightBlueColor,
                 child: Text("Start Searching!"),
                 onPressed: () => Navigator.of(context).push(
@@ -70,4 +78,3 @@ class QuietBox extends StatelessWidget {
     );
   }
 }
-//do somethign

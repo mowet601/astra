@@ -1,11 +1,15 @@
 import 'dart:io';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:astra/models/log.dart';
 import 'package:astra/resources/local_db/interface/log_interface.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 class HiveMethods implements LogInterface {
-  String hive_box = "Call_Logs";
+  String hive_box = "";
+
+  @override
+  openDb(dbName) => (hive_box = dbName);
 
   @override
   init() async {
@@ -19,7 +23,10 @@ class HiveMethods implements LogInterface {
 
     var logMap = log.toMap(log);
 
+    // box.put("custom_key", logMap);
     int idOfInput = await box.add(logMap);
+
+    print("Log added with id ${idOfInput.toString()} in Hive db");
 
     close();
 
@@ -27,7 +34,6 @@ class HiveMethods implements LogInterface {
   }
 
   updateLogs(int i, Log newLog) async {
-    // covers the check of the box being already open
     var box = await Hive.openBox(hive_box);
 
     var newLogMap = newLog.toMap(newLog);
@@ -45,6 +51,7 @@ class HiveMethods implements LogInterface {
 
     for (int i = 0; i < box.length; i++) {
       var logMap = box.getAt(i);
+
       logList.add(Log.fromMap(logMap));
     }
     return logList;
@@ -55,6 +62,7 @@ class HiveMethods implements LogInterface {
     var box = await Hive.openBox(hive_box);
 
     await box.deleteAt(logId);
+    // await box.delete(logId);
   }
 
   @override

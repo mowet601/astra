@@ -5,6 +5,7 @@ import 'package:astra/screens/search_screen.dart';
 import 'package:astra/utils/universal_variables.dart';
 import 'package:astra/widgets/contact_view.dart';
 import 'package:astra/widgets/custom_appbar.dart';
+import 'package:astra/widgets/logs_appbar.dart';
 import 'package:astra/widgets/new_chat_button.dart';
 import 'package:astra/widgets/quiet_box.dart';
 import 'package:astra/widgets/user_circle.dart';
@@ -20,49 +21,6 @@ class ChatListScreen extends StatefulWidget {
 
 class _ChatListScreenState extends State<ChatListScreen> {
   UserProvider userProvider;
-  CustomAppBar customAppBar(BuildContext context) {
-    return CustomAppBar(
-      leading: IconButton(
-        icon: Icon(
-          Icons.notifications,
-          color: Colors.white,
-        ),
-        onPressed: () {},
-      ),
-      title: UserCircle(),
-      centerTitle: true,
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(
-            Icons.search,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.of(context).push(
-              PageRouteBuilder(
-                transitionDuration: Duration(seconds: 1),
-                transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation, Widget child) {
-                  animation = CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
-
-                  return ScaleTransition(alignment: Alignment.topRight, scale: animation, child: child);
-                },
-                pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secAnimation) {
-                  return SearchScreen();
-                }
-              ),
-            );
-          },
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.more_vert,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
 
   @override
   void initState() {
@@ -77,9 +35,51 @@ class _ChatListScreenState extends State<ChatListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: UniversalVariables.blackColor,
-      appBar: customAppBar(context),
+      appBar: LogsAppBar(
+        title: UserCircle(),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                    transitionDuration: Duration(seconds: 1),
+                    transitionsBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secAnimation,
+                        Widget child) {
+                      animation = CurvedAnimation(
+                          parent: animation, curve: Curves.elasticInOut);
+
+                      return ScaleTransition(
+                          alignment: Alignment.topRight,
+                          scale: animation,
+                          child: child);
+                    },
+                    pageBuilder: (BuildContext context,
+                        Animation<double> animation,
+                        Animation<double> secAnimation) {
+                      return SearchScreen();
+                    }),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.more_vert,
+              color: Colors.white,
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
       floatingActionButton: NewChatButton(),
-      body: RefreshIndicator(onRefresh: () async=> await userProvider.refreshUser(), child: ChatListContainer()),
+      body: RefreshIndicator(
+          onRefresh: () async => await userProvider.refreshUser(),
+          child: ChatListContainer()),
     );
   }
 }
@@ -101,7 +101,11 @@ class ChatListContainer extends StatelessWidget {
               var docList = snapshot.data.documents;
 
               if (docList.isEmpty) {
-                return QuietBox();
+                return QuietBox(
+                  heading: "Contacts",
+                  subtitle:
+                      "Search For Friends and Family!",
+                );
               }
               return ListView.builder(
                 padding: EdgeInsets.all(10),

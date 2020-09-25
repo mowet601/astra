@@ -1,24 +1,26 @@
 import 'dart:io';
+
 import 'package:astra/models/log.dart';
 import 'package:astra/resources/local_db/interface/log_interface.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import "package:path/path.dart";
+import 'package:path/path.dart';
 
 class SqliteMethods implements LogInterface {
   Database _db;
-  String databaseName =
-      "LogDB"; // change it dynamically in future for each user
+
+  String databaseName = "";
+
   String tableName = "Call_Logs";
 
-  // COLUMNS
-  String id = "log_id";
-  String callerName = "caller_name";
-  String callerPic = "caller_pic";
-  String receiverName = "receiver_name";
-  String receiverPic = "receiver_pic";
-  String callStatus = "call_status";
-  String timestamp = "timestamp";
+  // columns
+  String id = 'log_id';
+  String callerName = 'caller_name';
+  String callerPic = 'caller_pic';
+  String receiverName = 'receiver_name';
+  String receiverPic = 'receiver_pic';
+  String callStatus = 'call_status';
+  String timestamp = 'timestamp';
 
   Future<Database> get db async {
     if (_db != null) {
@@ -30,38 +32,34 @@ class SqliteMethods implements LogInterface {
   }
 
   @override
+  openDb(dbName) => (databaseName = dbName);
+
+  @override
   init() async {
     Directory dir = await getApplicationDocumentsDirectory();
-    String path =
-        join(dir.path, databaseName); // joins using '/' and makes it accessible
+    String path = join(dir.path, databaseName);
     var db = await openDatabase(path, version: 1, onCreate: _onCreate);
     return db;
   }
 
   _onCreate(Database db, int version) async {
-    // Columns database should have
     String createTableQuery =
         "CREATE TABLE $tableName ($id INTEGER PRIMARY KEY, $callerName TEXT, $callerPic TEXT, $receiverName TEXT, $receiverPic TEXT, $callStatus TEXT, $timestamp TEXT)";
 
     await db.execute(createTableQuery);
-    print("table created!");
+    print("table created");
   }
 
   @override
   addLogs(Log log) async {
     var dbClient = await db;
+    print("the log has been added in sqlite db");
     await dbClient.insert(tableName, log.toMap(log));
-  }
-
-  @override
-  deleteLogs(int logId) async {
-    var dbClient = await db;
-    return await dbClient
-        .delete(tableName, where: '$id = ?', whereArgs: [logId]);
   }
 
   updateLogs(Log log) async {
     var dbClient = await db;
+
     await dbClient.update(
       tableName,
       log.toMap(log),
@@ -75,6 +73,7 @@ class SqliteMethods implements LogInterface {
     try {
       var dbClient = await db;
 
+      // List<Map> maps = await dbClient.rawQuery("SELECT * FROM $tableName");
       List<Map> maps = await dbClient.query(
         tableName,
         columns: [
@@ -103,7 +102,13 @@ class SqliteMethods implements LogInterface {
     }
   }
 
-  // not necessary -> db does it for us
+  @override
+  deleteLogs(int logId) async {
+    var client = await db;
+    return await client
+        .delete(tableName, where: '$id = ?', whereArgs: [logId + 1]);
+  }
+
   @override
   close() async {
     var dbClient = await db;
