@@ -62,7 +62,6 @@ class HiveMethods implements LogInterface {
     var box = await Hive.openBox(hive_box);
 
     await box.deleteAt(logId);
-    // await box.delete(logId);
   }
 
   @override

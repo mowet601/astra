@@ -29,6 +29,8 @@ class _MyAppState extends State<MyApp> {
       ],
           child: MaterialApp(
         title: "Astra",
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
         debugShowCheckedModeBanner: false,
         initialRoute: "/",
         routes: {

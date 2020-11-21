@@ -447,12 +447,6 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           onPressed: () async => await Permissions.cameraAndMicrophonePermissionsGranted()? CallUtils.dial(from: sender, to: widget.receiver, context: context) : {},
         ),
-        IconButton(
-          icon: Icon(
-            Icons.phone,
-          ),
-          onPressed: () {},
-        )
       ],
     );
   }

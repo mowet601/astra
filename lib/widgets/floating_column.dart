@@ -7,18 +7,6 @@ class FloatingColumn extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: UniversalVariables.goodGradient,
-          ),
-          child: Icon(
-            Icons.dialpad,
-            color: Colors.white,
-            size: 25,
-          ),
-          padding: EdgeInsets.all(15),
-        ),
         SizedBox(height: 15,),
         Container(
           decoration: BoxDecoration(

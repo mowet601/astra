@@ -116,7 +116,7 @@ class ChatMethods {
   Stream<QuerySnapshot> fetchContacts({String userId}) => _userCollection
       .document(userId)
       .collection("contacts")
-      .orderBy("added_on")
+      .orderBy("added_on", descending: true)
       .snapshots();
 
   Stream<QuerySnapshot> fetchLastMessageBetween({

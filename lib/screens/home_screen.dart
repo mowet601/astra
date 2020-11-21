@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   PageController pageController;
   int _pageNo = 0;
 
@@ -32,10 +32,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
 
       _authMethods.setUserState(
         userId: userProvider.getUser.uid,
-        userState: UserState.Online, 
+        userState: UserState.Online,
       );
 
-      LogRepository.init(isHive: true, dbName: userProvider.getUser.uid,);
+      LogRepository.init(
+        isHive: true,
+        dbName: userProvider.getUser.uid,
+      );
     });
 
     WidgetsBinding.instance.addObserver(this);
@@ -48,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
     WidgetsBinding.instance.removeObserver(this);
   }
 
-   @override
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     String currentUserId =
         (userProvider != null && userProvider.getUser != null)
@@ -98,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
   @override
   Widget build(BuildContext context) {
     return PickupLayout(
-          scaffold: Scaffold(
+      scaffold: Scaffold(
         backgroundColor: UniversalVariables.blackColor,
         body: PageView(
           children: [
@@ -107,7 +110,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
             ),
             LogScreen(),
             Center(
-              child: Text("Contacts Here", style: TextStyle(color: Colors.white),),
+              child: Text(
+                "Contacts Here",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
           controller: pageController,
@@ -147,22 +153,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
                     style: TextStyle(
                         fontSize: 10.0,
                         color: (_pageNo == 1
-                            ? UniversalVariables.lightBlueColor
-                            : UniversalVariables.greyColor)),
-                  ),
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.contacts,
-                    color: (_pageNo == 2
-                        ? UniversalVariables.lightBlueColor
-                        : UniversalVariables.greyColor),
-                  ),
-                  title: Text(
-                    "Contacts",
-                    style: TextStyle(
-                        fontSize: 10.0,
-                        color: (_pageNo == 2
                             ? UniversalVariables.lightBlueColor
                             : UniversalVariables.greyColor)),
                   ),
